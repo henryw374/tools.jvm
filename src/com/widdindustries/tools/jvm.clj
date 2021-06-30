@@ -38,7 +38,7 @@
                    "jvm.memory.max" (.getMax usage)}))))})
 
 (defn all-snapshots []
-  {"classsloading" (class-loading-snapshot)
+  {"classloading" (class-loading-snapshot)
    "memory" (memory-snapshot)})
 
 (defn thread-dump
