@@ -4,6 +4,10 @@ clojure tools for getting information about the jvm runtime
 
 # Usage 
 
+
+[![Clojars Project](https://img.shields.io/clojars/v/com.widdindustries/tools.jvm.svg)](https://clojars.org/com.widdindustries/tools.jvm)
+
+
 ```clojure
 
 (require '[com.widdindustries.tools.jvm :as jvm])
