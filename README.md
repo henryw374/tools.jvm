@@ -2,6 +2,10 @@
 
 clojure tools for getting information about the jvm runtime
 
+Dependency-free
+
+This has been tested on various java 11 runtimes.
+
 # Usage 
 
 
@@ -19,6 +23,10 @@ clojure tools for getting information about the jvm runtime
 (jvm/thread-dump)
 
 ```
+
+There are many other bits of interesting data in jvm objects from the standard library, hidden by ESLs. 
+
+PRs welcome to add more functions to get data out of those
 
 
 # Release
