@@ -1,0 +1,3 @@
+{:paths ["src"]
+ :aliases {:release     {:extra-deps {applied-science/deps-library {:mvn/version "RELEASE"}}
+                         :main-opts  ["-m" "applied-science.deps-library"]}}}
