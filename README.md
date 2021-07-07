@@ -1,8 +1,10 @@
 # tools.jvm
 
-clojure tools for getting information about the jvm runtime
+clojure tools for getting information about the jvm runtime as data
 
-Dependency-free
+Dependency-free. 
+
+There are many other bits of interesting data in jvm objects from the standard library, hidden by ESLs and not yet in this library, PRs welcome to add more functions to get data out of those
 
 This has been tested on various java 11 runtimes.
 
@@ -23,10 +25,6 @@ This has been tested on various java 11 runtimes.
 (jvm/thread-dump)
 
 ```
-
-There are many other bits of interesting data in jvm objects from the standard library, hidden by ESLs. 
-
-PRs welcome to add more functions to get data out of those
 
 
 # Release
