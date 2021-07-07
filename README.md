@@ -8,6 +8,8 @@ There are many other bits of interesting data in jvm objects from the standard l
 
 This has been tested on various java 11 runtimes.
 
+Also included is a 'gauge' namespace, which provides tools for periodically calling registered functions. This can be used as a replacement for micrometer or dropwizard metrics. 
+
 # Usage 
 
 
