@@ -1,5 +1,6 @@
 (ns com.widdindustries.tools.jvm
-  (:require [clojure.stacktrace :as stck])
+  (:require [clojure.stacktrace :as stck]
+            [clojure.string :as string])
   (:import (java.lang.management ManagementFactory 
                                  ClassLoadingMXBean 
                                  BufferPoolMXBean 
@@ -10,6 +11,17 @@
                                  ThreadInfo)))
 
 (set! *warn-on-reflection* true)
+
+(defn isGenerationalGcConfigured []
+  (->> (ManagementFactory/getMemoryPoolMXBeans)
+       (some (fn [^MemoryPoolMXBean b]
+                 (and (= MemoryType/HEAP (.getType b))
+                      (not (string/includes? (.getName b) "tenured")))))
+       boolean))
+
+
+(defn gc-snapshot []
+  )
 
 (defn class-loading-snapshot []
   (let [^ClassLoadingMXBean b (ManagementFactory/getClassLoadingMXBean)]
@@ -58,7 +70,7 @@
                              st)))}))))
 
 
-(comment 
+(comment
   (all-snapshots)
   (thread-dump)
   )
