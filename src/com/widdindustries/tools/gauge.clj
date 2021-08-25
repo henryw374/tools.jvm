@@ -1,6 +1,10 @@
 (ns com.widdindustries.tools.gauge
   "an API for periodically invoking registered callbacks
-   - aka Gauges as they are known in jvm metric libraries"
+   - aka Gauges as they are known in jvm metric libraries.
+
+   single registry means that cannot have multiple gauges registered for different time spans,
+   or registries for different systems
+   "
   (:import (java.util.logging Logger Level)
            (java.time Duration)))
 
@@ -8,9 +12,10 @@
 
 (defprotocol Gauge
   (gauge-name [_] "name should be unique within the registry")
-  (log [_] "aka the callback. do whatever side-effecting stuff you like"))
+  (log [_] "aka the callback. this should log the state of the gauge as a side-effect. return value is ignored")
+  (value [_] "return the value of the gauge - not used by the gauge logging thread but could be useful for debugging"))
 
-(def registry (atom {}))
+(def ^:private registry (atom {}))
 
 (defn deregister-all-gauges []
   (reset! registry {})
@@ -19,6 +24,9 @@
 (defn deregister-gauge [measurement-name]
   (swap! registry dissoc measurement-name)
   nil)
+
+(defn get-gauge [measurement-name]
+  (get @registry measurement-name))
 
 (defn register-gauge [g]
   (assert (satisfies? Gauge g) "arg is not a gauge")
