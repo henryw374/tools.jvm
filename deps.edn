@@ -1,3 +1,4 @@
-{:paths ["src"]
- :aliases {:release     {:extra-deps {applied-science/deps-library {:mvn/version "RELEASE"}}
-                         :main-opts  ["-m" "applied-science.deps-library"]}}}
+{:paths   ["src"]
+ :aliases {:play {:extra-deps    {io.micrometer/micrometer-core {:mvn/version "1.7.1"}}}
+           :release {:extra-deps {applied-science/deps-library {:mvn/version "RELEASE"}}
+                     :main-opts  ["-m" "applied-science.deps-library"]}}}

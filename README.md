@@ -4,7 +4,7 @@ clojure tools for getting information about the jvm runtime as data
 
 Dependency-free. 
 
-There are many other bits of interesting data in jvm objects from the standard library, hidden by ESLs and not yet in this library, PRs welcome to add more functions to get data out of those
+There are many other bits of interesting data in jvm objects from the standard library, hidden by ESLs and not yet in this library (e.g. thread pool stats), PRs welcome to add more functions to get data out of those
 
 This has been tested on various java 11 runtimes.
 
@@ -20,11 +20,16 @@ Also included is a 'gauge' namespace, which provides tools for periodically call
 
 (require '[com.widdindustries.tools.jvm :as jvm])
 
-;get data about memory usage, classloading (and not yet... gc, threads)
+;get data about memory usage, classloading and threads
 (jvm/all-snapshots)
 
 ; thread dump as data
 (jvm/thread-dump)
+
+; log garbage collections
+(listen-to-gc println)
+(stop-listening-to-gc)
+
 
 ```
 
