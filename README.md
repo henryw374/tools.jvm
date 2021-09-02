@@ -4,11 +4,15 @@ clojure tools for getting information about the jvm runtime as data
 
 Dependency-free. 
 
-There are many other bits of interesting data in jvm objects from the standard library, hidden by ESLs and not yet in this library (e.g. thread pool stats), PRs welcome to add more functions to get data out of those
+There are many other bits of interesting data in jvm objects from the standard library (e.g. thread pool stats), hidden by ESLs and not yet in this library, PRs welcome to add more functions to get data out of those
 
 This has been tested on various java 11 runtimes.
 
-Also included is a 'gauge' namespace, which provides tools for periodically calling registered functions. This can be used as a replacement for micrometer or dropwizard metrics. 
+Also included is a 'gauge' namespace, which provides tools for periodically calling registered functions. This can be used as a replacement for micrometer or dropwizard metrics.
+
+The functions that return gc, memory and thread data are all based on micrometer's
+implementation. Unfortunately the only way to use micrometer's versions is via 
+their Gauge/Meter/Timer API.
 
 # Usage 
 
