@@ -7,7 +7,7 @@
                                  MemoryPoolMXBean
                                  MemoryUsage
                                  ThreadMXBean
-                                 ThreadInfo GarbageCollectorMXBean)
+                                 ThreadInfo GarbageCollectorMXBean RuntimeMXBean)
            [java.util.logging Logger Level]
            (javax.management NotificationEmitter NotificationListener Notification NotificationFilter)
            (com.sun.management GarbageCollectionNotificationInfo GcInfo)
@@ -39,8 +39,8 @@
           {"phase"       (if (isConcurrentPhase gcCause) "jvm.gc.concurrent.phase.time"
                                                          "jvm.gc.pause.time")
            "time_millis" duration
-           "action", gcAction, 
-           "cause", gcCause}))
+           "action",     gcAction,
+           "cause",      gcCause}))
       nil)))
 
 (def listeners (atom []))
@@ -71,9 +71,9 @@
 
 (defn thread-snapshot []
   (let [^ThreadMXBean bean (ManagementFactory/getThreadMXBean)]
-    {"jvm.threads.peak" (.getPeakThreadCount bean)
-     "jvm.threads.daemon" (.getDaemonThreadCount bean)
-     "jvm.threads.live" (.getThreadCount bean)
+    {"jvm.threads.peak"        (.getPeakThreadCount bean)
+     "jvm.threads.daemon"      (.getDaemonThreadCount bean)
+     "jvm.threads.live"        (.getThreadCount bean)
      "jvm.threads.state-count" (->> (.getThreadInfo bean (.getAllThreadIds bean))
                                     (map #(str (.getThreadState ^ThreadInfo %)))
                                     frequencies)}))
@@ -99,8 +99,8 @@
                 (let [mem-type (if (= MemoryType/HEAP (.getType b)) "heap" "nonheap")]
                   (merge
                     (usage (.getUsage b))
-                    {"id"                   (.getName b)
-                     "area"                 mem-type})))))})
+                    {"id"   (.getName b)
+                     "area" mem-type})))))})
 
 (defn all-snapshots []
   {"classloading" (class-loading-snapshot)
@@ -123,11 +123,31 @@
                                     (stck/print-trace-element ele)))
                              st)))}))))
 
+(defn jvm-deets []
+  (let [^RuntimeMXBean runtime-bean (ManagementFactory/getRuntimeMXBean)]
+    {:spec-version              (.getSpecVersion runtime-bean)
+     :vm-version                (.getVmVersion runtime-bean)
+     :management-spec-version   (.getManagementSpecVersion runtime-bean)
+     :name                      (.getName runtime-bean)
+     :spec-name                 (.getSpecName runtime-bean)
+     :boot-class-path-supported (.isBootClassPathSupported runtime-bean)
+     :class-path                (.getClassPath runtime-bean)
+     :start-time                (.getStartTime runtime-bean)
+     :input-arguments           (.getInputArguments runtime-bean)
+     :system-properties         (.getSystemProperties runtime-bean)
+     :pid                       (.getPid runtime-bean)
+     :uptime                    (.getUptime runtime-bean)
+     :spec-vendor               (.getSpecVendor runtime-bean)
+     :vm-name                   (.getVmName runtime-bean)
+     :boot-class-path           (if (.isBootClassPathSupported runtime-bean) (.getBootClassPath runtime-bean) "Not Supported")
+     :library-path              (.getLibraryPath runtime-bean)
+     :vm-vendor                 (.getVmVendor runtime-bean)}))
 
 (comment
+  (jvm-deets)
   (all-snapshots)
   (thread-dump)
-  
+
   (listen-to-gc println)
   (stop-listening-to-gc)
 
