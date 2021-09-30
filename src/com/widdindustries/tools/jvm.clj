@@ -75,7 +75,8 @@
      "jvm.threads.daemon"      (.getDaemonThreadCount bean)
      "jvm.threads.live"        (.getThreadCount bean)
      "jvm.threads.state-count" (->> (.getThreadInfo bean (.getAllThreadIds bean))
-                                    (map #(str (.getThreadState ^ThreadInfo %)))
+                                    (keep #(try (str (.getThreadState ^ThreadInfo %))
+                                               (catch Throwable _t)))
                                     frequencies)}))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
