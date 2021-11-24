@@ -113,7 +113,8 @@
   ([max-depth]
    (let [^ThreadMXBean threadMXBean (ManagementFactory/getThreadMXBean)
          info (.getThreadInfo threadMXBean (.getAllThreadIds threadMXBean) ^int max-depth)]
-     (for [^ThreadInfo threadInfo info]
+     (for [^ThreadInfo threadInfo info
+            :when threadInfo]
        {"thread.name"  (.getThreadName threadInfo)
         "thread.state" (str (.getThreadState threadInfo))
         "thread.stack" (let [st (.getStackTrace threadInfo)]
