@@ -10,7 +10,7 @@
                                  ThreadInfo GarbageCollectorMXBean RuntimeMXBean)
            [java.util.logging Logger Level]
            (javax.management NotificationEmitter NotificationListener Notification NotificationFilter)
-           (com.sun.management GarbageCollectionNotificationInfo GcInfo)
+           (com.sun.management GarbageCollectionNotificationInfo GcInfo HotSpotDiagnosticMXBean)
            (javax.management.openmbean CompositeData)))
 
 (def ^Logger logger (Logger/getLogger "com.widdindustries.tools.jvm"))
@@ -145,7 +145,16 @@
      :library-path              (.getLibraryPath runtime-bean)
      :vm-vendor                 (.getVmVendor runtime-bean)}))
 
+(defn heap-dump [output-path live?]
+  (let [b ^HotSpotDiagnosticMXBean
+          (ManagementFactory/newPlatformMXBeanProxy
+            (ManagementFactory/getPlatformMBeanServer)
+            "com.sun.management:type=HotSpotDiagnostic"
+            HotSpotDiagnosticMXBean)]
+    (.dumpHeap b output-path live?)))
+
 (comment
+  (heap-dump "/tmp/my.hprof" true)
   (jvm-deets)
   (all-snapshots)
   (thread-dump)
